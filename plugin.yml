@@ -4,10 +4,12 @@ api: [3.0.0, 4.0.0]
 main: Main\Main
 author: HerrSchnecki
 description: Ein einfaches Plugin zum Senden von Broadcast-Nachrichten.
+
 commands:
   broadcast:
     description: Sendet eine Broadcast-Nachricht an alle Spieler auf dem Server.
     usage: /broadcast <Nachricht>
+    
 permissions: broadcast.use
   broadcast.use:
     description: Erlaubt Spielern die Verwendung des Broadcast-Befehls.
