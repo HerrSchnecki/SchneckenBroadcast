@@ -53,10 +53,3 @@ class Main extends PluginBase{
         $this->getServer()->broadcastMessage($broadcastMessage);
     }
 }
-
-
-
-
-
-
-
