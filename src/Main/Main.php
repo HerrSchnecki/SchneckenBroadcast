@@ -27,6 +27,7 @@ class Main extends PluginBase{
                 }else{
                     $sender->sendMessage(TextFormat::RED . "Du hast keine Rechte zu diesem Befehl!");
                     return true;
+                }
             }
         }
         return false;
@@ -52,6 +53,7 @@ class Main extends PluginBase{
         $this->getServer()->broadcastMessage($broadcastMessage);
     }
 }
+
 
 
 
