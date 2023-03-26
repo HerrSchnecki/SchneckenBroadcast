@@ -30,6 +30,8 @@ class Main extends PluginBase{
                 }
             }
         }
+        return false;
+    }
 
     public function openBroadcastForm(Player $player){
         $form = new SimpleForm(function(Player $player, $data){
