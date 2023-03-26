@@ -12,24 +12,24 @@ use jojoe77777\FormAPI\SimpleForm;
 
 class Main extends PluginBase{
 
-    public function onEnable(): void
+    public function onEnable(): void {
         @mkdir($this->getDataFolder());
         $this->saveDefaultConfig();
         $this->getLogger()->info(TextFormat::GREEN . "Das BroadcastPlugin wurde aktiviert!");
     }
 
-    public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args): bool{
+    public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args): bool {
         if($cmd->getName() == "broadcast"){
             if($sender instanceof Player){
                 if($sender->hasPermission("broadcast.use")){
                     $this->openBroadcastForm($sender);
                     return true;
                 }else{
-                    $sender->sendMessage(TextFormat::RED . "Du hast keine Rechte zu diesen Command!");
+                    $sender->sendMessage(TextFormat::RED . "Du hast keine Rechte zu diesem Befehl!");
                     return true;
                 }
             }else{
-                $sender->sendMessage(TextFormat::RED . "This command can only be used in-game!");
+                $sender->sendMessage(TextFormat::RED . "Dieser Befehl kann nur im Spiel verwendet werden!");
                 return true;
             }
         }
@@ -43,8 +43,8 @@ class Main extends PluginBase{
             }
         });
         $form->setTitle("Broadcast");
-        $form->setContent("Geben sie eine Nachricht ein die sie verbreiten möchten:");
-        $form->addInput("", "Example:Willkommen auf den Server!");
+        $form->setContent("Geben Sie eine Nachricht ein, die Sie verbreiten möchten:");
+        $form->addInput("", "Beispiel: Willkommen auf dem Server!");
         $form->sendToPlayer($player);
         return $form;
     }
