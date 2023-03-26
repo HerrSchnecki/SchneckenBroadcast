@@ -1,14 +1,14 @@
-name: "SchneckenBroadcast"
-api: [4.17.0]
+name: SchneckenBroadcast
+version: 1.0.0
+api: [3.0.0, 4.0.0]
 main: Main\Main
-version: 1.0.1
-author: Herrschnecki
-
+author: HerrSchnecki
+description: Ein einfaches Plugin zum Senden von Broadcast-Nachrichten.
 commands:
   broadcast:
-    description: "Versende einen Broadcast!"
-    permission: broadcast.use
+    description: Sendet eine Broadcast-Nachricht an alle Spieler auf dem Server.
+    usage: /broadcast <Nachricht>
 permissions:
-   broadcast.use:
-     default: op
-  
+  broadcast.use:
+    description: Erlaubt Spielern die Verwendung des Broadcast-Befehls.
+    default: op
