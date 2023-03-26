@@ -1,56 +1,84 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Main;
 
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
+use pocketmine\event\Listener;
 use pocketmine\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
-use pocketmine\utils\TextFormat;
-use jojoe77777\FormAPI\SimpleForm;
 
-class Main extends PluginBase{
+class Main extends PluginBase implements Listener {
 
-    public function onEnable(): void {
+    public function onEnable() {
+        // Register listener
+        $this->getServer()->getPluginManager()->registerEvents(new CustomUI($this), $this);
+        // Create config file
         $this->saveDefaultConfig();
-        $this->getLogger()->info(TextFormat::GREEN . "BroadcastPlugin wurde aktiviert!");
     }
 
-    public function onCommand(CommandSender $sender, Command $cmd, string $label, array $args): bool {
-        if($cmd->getName() === "broadcast"){
-            if(!$sender instanceof Player){
-                $sender->sendMessage(TextFormat::RED . "Dieser Befehl kann nur ingame ausgeführt werden!");
+    public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
+        if ($command->getName() === "broadcast") {
+            if (count($args) > 0) {
+                $message = implode(" ", $args);
+                $this->broadcastMessage($message);
                 return true;
+            } else {
+                $sender->sendMessage("Usage: /broadcast <message>");
+                return false;
             }
-            if(!$sender->hasPermission("broadcast.use")){
-                $sender->sendMessage(TextFormat::RED . "Du hast keine Rechte diesen Befehl auszuführen!");
-                return true;
-            }
-            $this->openBroadcastForm($sender);
-            return true;
         }
         return false;
     }
 
-    public function openBroadcastForm(Player $player): void {
-        $form = new SimpleForm(function(Player $player, $data): void {
-            if($data !== null){
-                $this->broadcast($player, $data);
-            }
-        });
-        $form->setTitle("Broadcast");
-        $form->setContent("Geben Sie eine Nachricht ein, die Sie verbreiten möchten:");
-        $form->addInput("", "Beispiel: Willkommen auf dem Server!");
-        $form->sendToPlayer($player);
-    }
-
-    public function broadcast(Player $player, string $message): void {
-        $config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
-        $prefix = $config->get("prefix");
-        $broadcastMessage = $prefix . $message;
-        $this->getServer()->broadcastMessage($broadcastMessage);
+    public function broadcastMessage(string $message) {
+        foreach ($this->getServer()->getOnlinePlayers() as $player) {
+            $player->sendMessage($this->getConfig()->get("broadcast-prefix") . $message);
+        }
     }
 }
+
+class CustomUI implements Listener {
+
+    private $plugin;
+
+    public function __construct(BroadcastPlugin $plugin) {
+        $this->plugin = $plugin;
+    }
+
+    public function onCustomFormResponse(\pocketmine\event\server\DataPacketReceiveEvent $event) {
+        $player = $event->getPlayer();
+        $packet = $event->getPacket();
+        if ($packet instanceof \pocketmine\network\mcpe\protocol\ModalFormResponsePacket) {
+            $formData = json_decode($packet->formData, true);
+            if ($packet->formId === 1) {
+                if (isset($formData[0]) && $formData[0] !== "") {
+                    $this->plugin->broadcastMessage($formData[0]);
+                    $player->sendMessage("Broadcasted message: " . $formData[0]);
+                } else {
+                    $player->sendMessage("Please enter a message");
+                }
+            }
+        }
+    }
+
+    public function sendCustomUI(Player $player) {
+        $uiData = [
+            "type" => "custom_form",
+            "title" => "Broadcast Message",
+            "content" => [
+                [
+                    "type" => "input",
+                    "text" => "Enter message to broadcast:",
+                    "default" => ""
+                ]
+            ]
+        ];
+        $packet = new \pocketmine\network\mcpe\protocol\ModalFormRequestPacket();
+        $packet->formId = 1;
+        $packet->formData = json_encode($uiData);
+        $player->sendDataPacket($packet);
+    }
+}
+
