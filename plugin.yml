@@ -8,7 +8,7 @@ commands:
   broadcast:
     description: Sendet eine Broadcast-Nachricht an alle Spieler auf dem Server.
     usage: /broadcast <Nachricht>
-permissions:
+permissions: broadcast.use
   broadcast.use:
     description: Erlaubt Spielern die Verwendung des Broadcast-Befehls.
     default: op
