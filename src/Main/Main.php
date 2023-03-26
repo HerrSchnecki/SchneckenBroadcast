@@ -11,7 +11,7 @@ use pocketmine\utils\Config;
 
 class Main extends PluginBase implements Listener {
 
-    public function onEnable() {
+    public function onEnable(): void {
         // Register listener
         $this->getServer()->getPluginManager()->registerEvents(new CustomUI($this), $this);
         // Create config file
