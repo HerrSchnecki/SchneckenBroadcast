@@ -27,6 +27,10 @@ class Main extends PluginBase{
                 }else{
                     $sender->sendMessage(TextFormat::RED . "Du hast keine Rechte zu diesem Befehl!");
                     return true;
+                }
+            }else{
+                $sender->sendMessage(TextFormat::RED . "Dieser Befehl kann nur im Spiel verwendet werden!");
+                return true;
             }
         }
         return false;
@@ -52,3 +56,9 @@ class Main extends PluginBase{
         $this->getServer()->broadcastMessage($broadcastMessage);
     }
 }
+
+
+
+
+
+
