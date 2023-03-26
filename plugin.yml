@@ -1,5 +1,13 @@
-name: SchneckenBroadcast
-version: 1.0.0
-api: [4.0.0]
+name: "Schnecken"
+api: [4.17.0]
 main: Main\Main
+version: 1.0.1
 author: Herrschnecki
+
+commands:
+  broadcast:
+    description: "Versende einen Broadcast!"
+    permission: broadcast.use
+permissions:
+   broadcast.use:
+     default: op
