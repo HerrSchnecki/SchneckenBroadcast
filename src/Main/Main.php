@@ -12,7 +12,7 @@ use jojoe77777\FormAPI\SimpleForm;
 
 class Main extends PluginBase{
 
-    public function onEnable(){
+    public function onEnable(): void
         @mkdir($this->getDataFolder());
         $this->saveDefaultConfig();
         $this->getLogger()->info(TextFormat::GREEN . "Das BroadcastPlugin wurde aktiviert!");
